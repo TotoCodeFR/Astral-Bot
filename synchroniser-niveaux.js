@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Replace with your actual Supabase project details
-const SUPABASE_URL = 'https://nsezgeitaaretwqupbyw.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zZXpnZWl0YWFyZXR3cXVwYnl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5Mzg5NzIsImV4cCI6MjA2ODUxNDk3Mn0.Oujcx8sStTuOtSgg8sBtuisQ0LwPwaCfbbaWxMHeeK8';
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY;
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 

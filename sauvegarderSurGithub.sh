@@ -13,7 +13,7 @@ git commit -m "$commit_message"
 
 # Push to remote repository
 echo "Pushing changes to GitHub..."
-git push origin main
+git push -u origin master
 
 if [ $? -eq 0 ]; then
     echo "✅ Successfully pushed to GitHub!"
