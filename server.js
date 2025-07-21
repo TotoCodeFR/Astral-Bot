@@ -29,6 +29,10 @@ export function initServer(port, client) {
         });
     });
 
+    server.get('/ping', (req, res) => {
+        res.send('pong')
+    });
+
     server.post('/api/restart', (req, res) => {
         client.destroy();
         initialization();
