@@ -1,8 +1,33 @@
 import express from 'express';
 import cors from 'cors';
 import logs from './logsShared.js'
+import { Client, GatewayIntentBits, Collection } from 'discord.js';
+import { deployCommands, deployEvents } from './deploy.js';
 
 let server = undefined
+
+async function initialization() {
+    const client = new Client({ 
+        intents: [
+            GatewayIntentBits.Guilds,
+            GatewayIntentBits.GuildMessages,
+            GatewayIntentBits.GuildMembers,
+            GatewayIntentBits.GuildVoiceStates
+        ] 
+    });
+    
+    client.commands = new Collection();
+
+    try {
+        await deployCommands(client);
+
+        await deployEvents(client);
+
+        await client.login(process.env.DISCORD_TOKEN);
+    } catch (error) {
+        console.error('Erreur en initialisant le bot', error);
+    }
+}
 
 export function initServer(port, client) {
     if (server) {

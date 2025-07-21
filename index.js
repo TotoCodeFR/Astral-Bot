@@ -28,7 +28,6 @@ function addLog(message) {
     };
 })(console.log);
 
-
 // Main async initialization function
 async function initialization() {
     const client = new Client({ 
