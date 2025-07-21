@@ -7,6 +7,6 @@ export default {
     execute(client) {
         console.log(`Connecté en tant que ${client.user.tag}`);
         client.user.setPresence({ activities: [{ name: 'version 0.1.5' }], status: PresenceUpdateStatus.Online });
-        initServer(8080, client);
+        initServer(process.env.PORT || 8080, client);
     }
 }
