@@ -1,5 +1,6 @@
 import { getDopplerClient } from './utility/doppler.js';
 const doppler = await getDopplerClient()
+import 'dotenv/config'
 import { getSupabaseClient } from './utility/supabase.js'
 import { Client, Events, GatewayIntentBits, Collection, MessageFlags, PresenceUpdateStatus, ThreadAutoArchiveDuration, ChannelType, EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, ModalBuilder, TextInputBuilder, TextInputStyle } from 'discord.js';
 import { deployCommands, deployEvents } from './deploy.js';
