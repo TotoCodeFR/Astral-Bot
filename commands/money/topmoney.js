@@ -1,5 +1,5 @@
 import { EmbedBuilder, SlashCommandBuilder } from "discord.js";
-import { getTopLevel } from "../../checkDb.js";
+import { getTopMoney } from "../../checkDb.js";
 import path from 'path';
 import { fileURLToPath } from "url";
 
@@ -8,8 +8,8 @@ const __dirname = path.dirname(__filename);
 
 export default {
     data: new SlashCommandBuilder()
-        .setName('topniveau')
-        .setDescription('Affiche les utilisateurs avec le niveau le plus haut du serveur.')
+        .setName('topargent')
+        .setDescription('Affiche les utilisateurs avec l\'argent le plus haut du serveur.')
         .addIntegerOption(option =>
             option.setName('top')
                 .setDescription('Le nombre de personnes dans le top à afficher.')
@@ -19,23 +19,23 @@ export default {
         await interaction.deferReply();
         const top = interaction.options.getInteger('top') || 5;
 
-        const topLevelData = await getTopLevel(top);
+        const topMoneyData = await getTopMoney(top);
 
         // Fetch member data for all users (even if not cached)
         const fields = await Promise.all(
-            topLevelData.map(async user => {
+            topMoneyData.map(async user => {
                 try {
                     const member = await interaction.guild.members.fetch(user.user_id);
 
                     return {
                         name: member.user.username,
-                        value: `Niveau: ${user.level}\nXP: ${user.total_xp}`,
+                        value: `Argent: ${user.money}\nRecord: ${user.record}`,
                         inline: true
                     };
                 } catch (err) {
                     return {
                         name: 'Utilisateur inconnu',
-                        value: `Niveau: ${user.level}\nXP: ${user.total_xp}`,
+                        value: `Argent: ${user.money}\nRecord: ${user.record}`,
                         inline: true
                     };
                 }
@@ -44,8 +44,8 @@ export default {
 
         const embed = new EmbedBuilder()
             .setColor('#0099ff')
-            .setTitle(`Top ${top} niveau`)
-            .setDescription(`Voici les ${top} utilisateurs avec le niveau le plus haut du serveur.`)
+            .setTitle(`Top ${top} argent`)
+            .setDescription(`Voici les ${top} utilisateurs avec l\'argent le plus haut du serveur.`)
             .setTimestamp()
             .addFields(fields);
 

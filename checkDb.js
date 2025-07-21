@@ -29,12 +29,12 @@ export async function getMoney(user_id) {
         .select('money, record')
         .eq('user_id', user_id)
         .single()
-    
+
     if (error) {
         if (error.code === "PGRST116") {
             const { error: moneyError } = await supabase
                 .from('money')
-                .insert({ user_id: user_id, level: 0, total_xp: 0 });
+                .insert({ user_id: user_id, money: 0, record: 0 });
             
             return getMoney(user_id)
         } else {
@@ -50,6 +50,20 @@ export async function getTopLevel(top = 5) {
         .from('levels')
         .select('user_id, level, total_xp')
         .order('total_xp', { ascending: false })
+        .limit(top)
+
+    if (error) {
+        console.error('❌ Impossible de récupérer les données des utilisateurs:', error.message);
+    }
+
+    return data
+}
+
+export async function getTopMoney(top = 5) {
+    const { data, error } = await supabase
+        .from('money')
+        .select('user_id, money, record')
+        .order('money', { ascending: false })
         .limit(top)
 
     if (error) {

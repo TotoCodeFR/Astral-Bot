@@ -1,4 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
+import { getDopplerClient } from './utility/doppler.js'
+
+await getDopplerClient()
 
 // Supabase project info
 const SUPABASE_URL = process.env.SUPABASE_URL;
