@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import logs from './logsShared.js'
 
 let server = undefined
 
@@ -13,7 +14,7 @@ export function initServer(port, client) {
 
     // CORS configuration for the client to fetch
     server.use(cors({
-        origin: '*', // Allow all origins or set to specific origins like: 'http://localhost:3000'
+        origin: '*', // Allow all origins or set to specific origins like: 'http://localhost:8080'
         methods: ['GET', 'POST'], // Allow only GET and POST requests
         allowedHeaders: ['Content-Type', 'Authorization']
     }));

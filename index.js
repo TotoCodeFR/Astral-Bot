@@ -4,10 +4,9 @@ import { getSupabaseClient } from './utility/supabase.js'
 import { Client, Events, GatewayIntentBits, Collection, MessageFlags, PresenceUpdateStatus, ThreadAutoArchiveDuration, ChannelType, EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, ModalBuilder, TextInputBuilder, TextInputStyle } from 'discord.js';
 import { deployCommands, deployEvents } from './deploy.js';
 import './installer-poppins.js'
+import logs from './logsShared.js'
 
 const supabase = getSupabaseClient()
-
-const logs = []; // Array to store logs
 
 // Function to add logs to the logs array (to be used for the last 10 seconds)
 function addLog(message) {
