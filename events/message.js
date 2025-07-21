@@ -16,7 +16,7 @@ function getRandomInt(min, max) {
 }
 
 function getXpForLevel(level) {
-    return Math.floor(50 * Math.pow(level, 2));
+    return Math.floor(50 * Math.pow(level, 2.25));
 }
 
 async function generateLevelUpImage(username, level, avatarUrl, currentXp, minXp, nextXp) {

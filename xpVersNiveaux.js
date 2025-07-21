@@ -17,7 +17,7 @@ function calculateLevelFromXp(xp) {
     let level = 0;
 
     while (true) {
-        const requiredXp = Math.floor(50 * Math.pow(level + 1, 2));
+        const requiredXp = Math.floor(50 * Math.pow(level + 1, 2.25));
         if (xp < requiredXp) break;
         level++;
     }
