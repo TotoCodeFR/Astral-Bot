@@ -9,7 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 function getXpForLevel(level) {
-    return Math.floor(50 * Math.pow(level, 1.25));
+    return Math.floor(50 * Math.pow(level, 2.25));
 }
 
 async function generateLevelUpImage(username, level, avatarUrl, currentXp, minXp, nextXp) {

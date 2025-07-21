@@ -44,3 +44,17 @@ export async function getMoney(user_id) {
 
     return data
 }
+
+export async function getTopLevel(top = 5) {
+    const { data, error } = await supabase
+        .from('levels')
+        .select('user_id, level, total_xp')
+        .order('total_xp', { ascending: false })
+        .limit(top)
+
+    if (error) {
+        console.error('❌ Impossible de récupérer les données des utilisateurs:', error.message);
+    }
+
+    return data
+}
