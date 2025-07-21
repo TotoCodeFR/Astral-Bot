@@ -72,6 +72,7 @@ export default {
                 .setRequired(false)
         ),
     async execute(interaction) {
+        await interaction.deferReply();
         const user = interaction.options.getUser('utilisateur') || interaction.user;
         
         const levelData = await getLevel(user.id);
@@ -89,7 +90,7 @@ export default {
             nextNextLevelXp
         );
 
-        await interaction.reply({
+        await interaction.editReply({
             files: [imageBuffer]
         });
     }
