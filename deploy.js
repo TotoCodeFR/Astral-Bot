@@ -2,7 +2,6 @@ import { REST, Routes } from 'discord.js';
 import { readdir } from 'node:fs/promises';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
-import 'dotenv/config';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -52,4 +51,29 @@ export async function deployCommands(client) {
 		console.error(error);
 		throw error;
 	}
+}
+
+export async function deployEvents(client) {
+	console.log('Chargement des évènements...')
+	const eventsPath = path.join(__dirname, 'events');
+	const eventFiles = (await readdir(eventsPath)).filter(file => file.endsWith('.js'));
+
+	for (const file of eventFiles) {
+		const filePath = path.join(eventsPath, file);
+		const fileUrl = pathToFileURL(filePath);
+		const eventModule = await import(fileUrl);
+		const event = eventModule.default;
+
+		if (event && event.name && typeof event.execute === 'function') {
+			if (event.once) {
+				client.once(event.name, (...args) => event.execute(...args));
+			} else {
+				client.on(event.name, (...args) => event.execute(...args));
+			}
+		} else {
+			console.warn(`[AVERTISSEMENT] L'évènement ${filePath} manque la/les propriéte(s) 'name' ou/et 'execute' !`);
+		}
+	}
+
+	console.log(`Chargement des évènements terminé! ${eventFiles.length} évènements chargés.`)
 }
