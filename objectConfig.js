@@ -50,7 +50,12 @@ Note : pour contactez le staff, sélectionnez "Contacter le staff" dans le menu 
                 .setLabel('Ouvrir un ticket')
                 .setStyle(ButtonStyle.Primary)
                 .setCustomId('create-ticket')
-                .setEmoji('🎫')
+                .setEmoji('🎫'),
+                new ButtonBuilder()
+                .setLabel('Créer un modmail')
+                .setStyle(ButtonStyle.Secondary)
+                .setCustomId('start-modmail')
+                .setEmoji('📬')
             )
         ],
         homeRow: [ new ActionRowBuilder().addComponents(createSelectMenu('home')) ],

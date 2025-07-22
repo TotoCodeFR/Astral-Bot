@@ -1,4 +1,4 @@
-import { ActivityType, Events, PresenceUpdateStatus } from "discord.js";
+import { ActivityType, Events } from "discord.js";
 import { initServer } from "../server.js";
 
 const statuses = [

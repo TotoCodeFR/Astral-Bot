@@ -2,7 +2,7 @@ import { getDopplerClient } from './utility/doppler.js';
 const doppler = await getDopplerClient()
 import 'dotenv/config'
 import { getSupabaseClient } from './utility/supabase.js'
-import { Client, Events, GatewayIntentBits, Collection, MessageFlags, PresenceUpdateStatus, ThreadAutoArchiveDuration, ChannelType, EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, ModalBuilder, TextInputBuilder, TextInputStyle } from 'discord.js';
+import { Client, Events, GatewayIntentBits, Collection, MessageFlags, PresenceUpdateStatus, ThreadAutoArchiveDuration, ChannelType, EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, ModalBuilder, TextInputBuilder, TextInputStyle, Partials } from 'discord.js';
 import { deployCommands, deployEvents } from './deploy.js';
 import './installer-poppins.js'
 import logs from './logsShared.js'
@@ -36,8 +36,11 @@ async function initialization() {
             GatewayIntentBits.Guilds,
             GatewayIntentBits.GuildMessages,
             GatewayIntentBits.GuildMembers,
-            GatewayIntentBits.GuildVoiceStates
-        ] 
+            GatewayIntentBits.GuildVoiceStates,
+            GatewayIntentBits.DirectMessages,
+            GatewayIntentBits.MessageContent,
+        ],
+        partials: [Partials.Channel]
     });
     
     client.commands = new Collection();
