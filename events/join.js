@@ -6,7 +6,7 @@ export default {
     async execute(member) {
         await member.send({
             embeds: [ objectConfig.interactiveDM.serverGuide ],
-            components: [ objectConfig.interactiveDM.serverGuideRow ]
+            components: objectConfig.interactiveDM.serverGuideRow
         })
     }
 }

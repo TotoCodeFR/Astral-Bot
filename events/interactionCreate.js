@@ -50,14 +50,32 @@ export default {
                 const { count } = await supabase
                     .from('tickets')
                     .select('*', { count: 'exact' })
-                const thread = await interaction.channel.threads.create({
-                    name: `ticket-${count + 1}-${interaction.user.username}`,
-                    autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
-                    reason: 'Nouveau ticket pour l\'utilisateur ' + interaction.user.username,
-                    type: ChannelType.PrivateThread
-                })
+                
+                let thread = null;
+                let transcripts = null;
 
-                const transcripts = interaction.guild.channels.cache.find(channel => channel.name.includes("transcripts"))
+                const guild = interaction.guild || await interaction.client.guilds.fetch('1200739738013937664');
+                
+                if (interaction.guild) {
+                    thread = await interaction.channel.threads.create({
+                        name: `ticket-${count + 1}-${interaction.user.username}`,
+                        autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
+                        reason: 'Nouveau ticket pour l\'utilisateur ' + interaction.user.username,
+                        type: ChannelType.PrivateThread
+                    })
+
+                    transcripts = interaction.guild.channels.cache.find(channel => channel.name.includes("transcripts"))
+                } else {
+                    thread = await guild.channels.cache.find(channel => channel.name.includes('créer-un-ticket')).threads.create({
+                        name: `ticket-${count + 1}-${interaction.user.username}`,
+                        autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
+                        reason: 'Nouveau ticket pour l\'utilisateur ' + interaction.user.username,
+                        type: ChannelType.PrivateThread
+                    })
+
+                    transcripts = guild.channels.cache.find(channel => channel.name.includes("transcripts"))
+                }
+                
 
                 thread.members.add(interaction.user.id)
                 thread.members.add(client.user.id)

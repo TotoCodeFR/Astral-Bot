@@ -18,7 +18,7 @@ export default {
 
                 await interaction.editReply({
                     embeds: [ objectConfig.interactiveDM[value] ],
-                    components: [ objectConfig.interactiveDM[value + "Row"] ]
+                    components: objectConfig.interactiveDM[value + "Row"]
                 })
             }
         }
