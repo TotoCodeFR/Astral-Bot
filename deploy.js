@@ -22,7 +22,7 @@ export async function deployCommands(client) {
 
 			const command = await import(fileUrl);
 
-		if (command.default && command.default.data && command.default.execute) {
+		if (command.default && command.default.data && command.default.execute && !command.default.ignore) {
 				commands.push(command.default.data.toJSON());
 				// Also add the command to the client.commands Collection
 				client.commands.set(command.default.data.name, command.default);
@@ -64,7 +64,7 @@ export async function deployEvents(client) {
 		const eventModule = await import(fileUrl);
 		const event = eventModule.default;
 
-		if (event && event.name && typeof event.execute === 'function') {
+		if (event && event.name && typeof event.execute === 'function' && !event.ignore) {
 			if (event.once) {
 				client.once(event.name, (...args) => event.execute(...args));
 			} else {
