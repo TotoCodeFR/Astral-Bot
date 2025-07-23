@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ChannelType, Events, ThreadAutoArchiveDuration, ButtonStyle, MessageFlags, EmbedBuilder } from "discord.js";
+import { Events, MessageFlags, EmbedBuilder } from "discord.js";
 import { getSupabaseClient } from "../utility/supabase.js";
 import objectConfig from '../objectConfig.js'
 

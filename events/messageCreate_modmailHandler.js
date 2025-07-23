@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ChannelType, Events, ThreadAutoArchiveDuration } from "discord.js";
+import { ChannelType, Events } from "discord.js";
 import { getSupabaseClient } from "../utility/supabase.js";
 
 const supabase = getSupabaseClient();
@@ -17,7 +17,6 @@ export default {
             
             if (error) {
                 if (error.code === 'PGRST116') {
-                    // No open modmail found, which is expected
                     return
                 } else {
                     console.error('Error fetching modmail data:', error);
