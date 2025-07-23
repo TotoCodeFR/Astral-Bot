@@ -24,10 +24,12 @@ const createSelectMenu = (defaultOptionValue) => new StringSelectMenuBuilder()
 export default {
     interactiveDM: {
         home: new EmbedBuilder()
+            .setColor('#FFD67E')
             .setDescription(
 `# 🏠 Accueil
 (En cours de développement)`),
         serverGuide: new EmbedBuilder()
+            .setColor('#FFD67E')
             .setDescription(
 `# 📜 Guide du serveur
 Je m'appelle Astral Bot, le bot du serveur **Astral Gaming**.
@@ -41,6 +43,7 @@ Vous pouvez utiliser le menu déroulant ci-dessous pour changer de fenêtre et a
 
 Note : pour contactez le staff, sélectionnez "Contacter le staff" dans le menu déroulant ci-dessous.`),
         contactStaff: new EmbedBuilder()
+            .setColor('#FFD67E')
             .setDescription(
 `# 📞 Contacter le staff`),
         contactStaffRow: [

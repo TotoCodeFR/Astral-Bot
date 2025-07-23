@@ -22,6 +22,25 @@ export default {
         const { count } = await supabase
             .from('modmail')
             .select('*', { count: 'exact' });
+        
+        const { data: openModmails, error: modmailCountError } = await supabase
+            .from('modmail')
+            .select('*')
+            .eq('closed', false)
+            .eq('user_id', interaction.user.id);
+        
+        if (modmailCountError) {
+            if (modmailCountError.code === 'PGRST116') {
+                // No open modmails found, which is expected
+            } else {
+                console.error('Error fetching open modmails:', modmailCountError);
+                return interaction.editReply("Une erreur est survenue lors de la récupération de vos modmails ouverts. Veuillez réessayer plus tard.");
+            }
+        }
+        
+        if (openModmails.length > 0) {
+            return interaction.editReply("Vous avez déjà un modmail ouvert. Veuillez attendre qu'un membre du staff vous réponde ou fermez le modmail existant avant d'en créer un nouveau.");
+        }
 
         const { error } = await supabase
             .from('modmail')
@@ -53,12 +72,6 @@ export default {
             reason: `Modmail créé par ${interaction.user.username}`,
         });
 
-        await thread.send({
-            content: `Modmail créé par ${interaction.user.username}. ID du modmail : ${count + 1}.`,
-            embeds: [],
-            components: []
-        });
-
         const closeModmail = new ButtonBuilder()
             .setCustomId('close-modmail')
             .setLabel('Fermer le modmail')
@@ -66,6 +79,12 @@ export default {
             .setEmoji('❌');
 
         const row = new ActionRowBuilder().addComponents(closeModmail);
+
+        await thread.send({
+            content: `Modmail créé par ${interaction.user.username}. ID du modmail : ${count + 1}.`,
+            embeds: [],
+            components: [ row ]
+        });
 
         await interaction.editReply({
             content: "Votre modmail a été créé avec succès. Un membre du staff vous répondra dès que possible. En attendant, décrivez votre problème ou question ci-dessous.",
