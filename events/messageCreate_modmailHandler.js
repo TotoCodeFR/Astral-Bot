@@ -16,8 +16,13 @@ export default {
                 .single()
             
             if (error) {
-                console.error('Error fetching modmail data:', error);
-                return message.reply("Une erreur est survenue lors de la récupération de vos données de modmail. Veuillez réessayer plus tard.");
+                if (error.code === 'PGRST116') {
+                    // No open modmail found, which is expected
+                    return
+                } else {
+                    console.error('Error fetching modmail data:', error);
+                    return message.reply("Une erreur est survenue lors de la récupération de vos données de modmail. Veuillez réessayer plus tard.");
+                }
             }
 
             if (!data) return
