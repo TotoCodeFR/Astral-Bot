@@ -10,10 +10,10 @@ export default {
     async execute(interaction) {
         await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-        await interaction.member.user.send({
-            embeds: [ objectConfig.interactiveDM.serverGuide ],
-            components: objectConfig.interactiveDM.serverGuideRow
-        })
+        await interaction.user.send({
+            embeds: [ objectConfig.interactiveDM.serverGuide.embed ],
+            components: objectConfig.interactiveDM.serverGuide.row
+        });
 
         await interaction.editReply({
             content: 'Le DM interactif a été renvoyé avec succès !',

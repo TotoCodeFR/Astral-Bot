@@ -164,3 +164,7 @@ cython_debug/
 =======
 config.json
 node_modules
+
+WARP.md
+
+*.csv

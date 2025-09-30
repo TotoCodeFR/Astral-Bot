@@ -84,6 +84,26 @@ export default {
         const nextLevelXp = getXpForLevel(levelData.level + 1);
         let levelDelta = 0;
 
+        if (!levelData || !moneyData) {
+            const { error: levelUpdateError } = await supabase
+                .from('levels')
+                .insert({ user_id: message.author.id, level: 0, total_xp: 0 });
+
+            if (levelUpdateError) {
+                console.error(`❌ Impossible de créer le niveau pour ${message.author.id}:`, updateError.message);
+                return;
+            }
+            
+            const { error: moneyUpdateError } = await supabase
+                .from('money')
+                .insert({ user_id: message.author.id, money: 0, record: 0 });
+
+            if (moneyUpdateError) {
+                console.error(`❌ Impossible de créer l'argent pour ${message.author.id}:`, updateError.message);
+                return;
+            }
+        }
+
         if (newXp >= nextLevelXp) {
             console.log(`🎉 ${message.author.id} est monté au niveau ${levelData.level + 1} !`);
 

@@ -1,12 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
-import { execSync, spawnSync } from 'child_process';
+import { execSync } from 'child_process';
 import https from 'https';
 
 const FONT_NAME = 'Poppins';
 const HOME_DIR = os.homedir();
-const FONT_DIR = path.join(HOME_DIR, '.fonts', 'poppins'); // dossier utilisateur
 const FILES = [
   'Poppins-Regular.ttf',
   'Poppins-Bold.ttf',
@@ -15,11 +14,22 @@ const FILES = [
 ];
 const BASE_URL = 'https://raw.githubusercontent.com/google/fonts/main/ofl/poppins/';
 
+const isWindows = process.platform === 'win32';
+
+const FONT_DIR = isWindows
+  ? path.join(HOME_DIR, 'AppData', 'Local', 'Microsoft', 'Windows', 'Fonts')
+  : path.join(HOME_DIR, '.fonts', 'poppins');
+
 // Fonction pour vérifier si la police est déjà installée
 function isFontInstalled() {
   try {
-    const result = execSync(`fc-list | grep -i ${FONT_NAME}`, { encoding: 'utf-8' });
-    return result.trim().length > 0;
+    if (isWindows) {
+      // Vérifie simplement si le fichier existe dans le dossier Fonts utilisateur
+      return FILES.every(file => fs.existsSync(path.join(FONT_DIR, file)));
+    } else {
+      const result = execSync(`fc-list | grep -i ${FONT_NAME}`, { encoding: 'utf-8' });
+      return result.trim().length > 0;
+    }
   } catch {
     return false;
   }
@@ -67,13 +77,17 @@ async function installFonts() {
     }
   }
 
-  // Rafraîchir la cache des polices
-  console.log('Rafraîchissement du cache fontconfig...');
-  try {
-    execSync('fc-cache -fv', { stdio: 'inherit' });
-  } catch (err) {
-    console.error('Erreur lors du rafraîchissement de la cache:', err.message);
-    return;
+  if (isWindows) {
+    console.log('Polices copiées. Vous devrez peut-être redémarrer vos applications pour qu’elles soient visibles.');
+  } else {
+    // Rafraîchir la cache des polices
+    console.log('Rafraîchissement du cache fontconfig...');
+    try {
+      execSync('fc-cache -fv', { stdio: 'inherit' });
+    } catch (err) {
+      console.error('Erreur lors du rafraîchissement de la cache:', err.message);
+      return;
+    }
   }
 
   if (isFontInstalled()) {
