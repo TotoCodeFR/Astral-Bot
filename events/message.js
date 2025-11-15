@@ -126,7 +126,9 @@ export default {
                 .setTitle(`${message.author.displayName} est passé au niveau ${levelData.level + 1} !`)
                 .setImage('attachment://levelup.png');
 
-            await message.channel.send({ embeds: [embed], files: [attachment] });
+            const message2 = await message.channel.send({ embeds: [embed], files: [attachment] });
+            message2.react('🎉');
+            setTimeout(() => message2.delete(), 60000)
         }
 
         const { error: levelUpdateError } = await supabase
