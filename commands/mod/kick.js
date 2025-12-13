@@ -1,24 +1,24 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, MessageFlags, PermissionsBitField, SlashCommandBuilder } from 'discord.js';
 import path from 'path';
 import { fileURLToPath } from "url";
-import 'dotenv/config';
 import { log } from '../../utility/log.js';
+import 'dotenv/config';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default {
     data: new SlashCommandBuilder()
-        .setName('ban')
-        .setDescription('Banne une personne.')
+        .setName('kick')
+        .setDescription('Expulse une personne.')
         .addUserOption(option => option
             .setName("utilisateur")
-            .setDescription("L'utilisateur à bannir")
+            .setDescription("L'utilisateur à expulser")
             .setRequired(true)
         )
         .addStringOption(option => option
             .setName("raison")
-            .setDescription("La raison pour bannir l'utilisateur.")
+            .setDescription("La raison pour expulser l'utilisateur.")
         ),
 
     async execute(interaction) {
@@ -30,11 +30,11 @@ export default {
         const user = interaction.options.getUser("utilisateur");
 
         const embed = new EmbedBuilder()
-            .setTitle("Bannir <@" + user.id + ">?")
-            .setDescription("<@" + interaction.member.id + "> veut bannir <@" + user.id + ">.");
+            .setTitle("Expulser <@" + user.id + ">?")
+            .setDescription("<@" + interaction.member.id + "> veut expulser <@" + user.id + ">.");
 
         const confirm = new ButtonBuilder()
-            .setLabel("Oui, je veux bannir cette personne.")
+            .setLabel("Oui, je veux expulser cette personne.")
             .setEmoji('✅')
             .setStyle(ButtonStyle.Success)
             .setCustomId("confirm");
@@ -48,22 +48,30 @@ export default {
         const row = new ActionRowBuilder()
             .addComponents(confirm, cancel);
 
-        const réponse = interaction.editReply({ embeds: [embed], components: [row], withResponse: true });
+        const réponse = await interaction.editReply({
+            embeds: [embed],
+            components: [row],
+            fetchReply: true
+        });
 
         const collectorFilter = i => i.user.id === interaction.user.id;
 
         try {
-            const confirmation = await réponse.resource.message.awaitMessageComponent({ filter: collectorFilter, time: 120_000 });
+            const confirmation = await réponse.awaitMessageComponent({
+                filter: collectorFilter,
+                time: 120_000
+            });
 
             if (confirmation.customId === "confirm") {
-                await interaction.guild.members.ban(user);
-                await confirmation.update({ content: 'Utilisateur banni.' });
-                await log(interaction, "ban", { banned_username: user.username, reason: interaction.options.getString("raison") });
+                await interaction.guild.members.kick(user, interaction.options.getString("raison"));
+                await confirmation.update({ content: 'Utilisateur expulsé.', embeds: [], components: [] });
+                await log(interaction, "kick", { kicked_username: user.username, reason: interaction.options.getString("raison") });
             } else if (confirmation.customId === "cancel") {
-                await confirmation.update({ content: 'Action annulée.', components: [] });
+                await confirmation.update({ content: 'Action annulée.', embeds: [], components: [] });
             }
-        } catch {
-            await interaction.editReply({ content: 'Aucune confirmation reçue!', components: [] });
+        } catch (e) {
+            await interaction.editReply({ content: 'Aucune confirmation reçue!', embeds: [], components: [] });
+            console.log(e);
         }
     },
 };

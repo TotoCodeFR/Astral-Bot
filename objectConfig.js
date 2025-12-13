@@ -1,10 +1,10 @@
-import { 
-    StringSelectMenuBuilder, 
-    StringSelectMenuOptionBuilder, 
-    ActionRowBuilder, 
-    EmbedBuilder, 
-    ButtonBuilder, 
-    ButtonStyle 
+import {
+    StringSelectMenuBuilder,
+    StringSelectMenuOptionBuilder,
+    ActionRowBuilder,
+    EmbedBuilder,
+    ButtonBuilder,
+    ButtonStyle
 } from "discord.js";
 
 // --- Options array ---
@@ -31,6 +31,25 @@ const createSelectMenu = (defaultOptionValue) => {
     return menu;
 };
 
+const logs = {
+    ban: {
+        getEmbed(interaction, fields) {
+            return new EmbedBuilder()
+                .setAuthor({ name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL() })
+                .setTitle(`${fields.banned_username} a été banni`)
+                .setDescription(`Raison : ${fields.reason}`);
+        }
+    },
+    kick: {
+        getEmbed(interaction, fields) {
+            return new EmbedBuilder()
+                .setAuthor({ name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL() })
+                .setTitle(`${fields.kicked_username} a été expulsé`)
+                .setDescription(`Raison : ${fields.reason}`);
+        }
+    }
+};
+
 // --- interactiveDM object ---
 const interactiveDM = {
     home: {
@@ -39,7 +58,7 @@ const interactiveDM = {
         embed: new EmbedBuilder()
             .setColor('#FFD67E')
             .setDescription(
-`# 🏠 Accueil
+                `# 🏠 Accueil
 (En cours de développement)`),
     },
     serverGuide: {
@@ -48,7 +67,7 @@ const interactiveDM = {
         embed: new EmbedBuilder()
             .setColor('#FFD67E')
             .setDescription(
-`# 📜 Guide du serveur
+                `# 📜 Guide du serveur
 Je m'appelle Astral Bot, le bot du serveur **Astral Gaming**.
 Je suis là pour vous aider à naviguer dans le serveur et à trouver les informations dont vous avez besoin.
 Vous pouvez utiliser le menu déroulant ci-dessous pour changer de fenêtre et accéder à différentes sections du guide.
@@ -83,9 +102,9 @@ Object.entries(interactiveDM).forEach(([key, value]) => {
 });
 
 // --- Now that options exist, add rows to each embed section ---
-interactiveDM.home.row = [ new ActionRowBuilder().addComponents(createSelectMenu('home')) ];
-interactiveDM.serverGuide.row = [ new ActionRowBuilder().addComponents(createSelectMenu('serverGuide')) ];
-interactiveDM.contactStaff.row = [ 
+interactiveDM.home.row = [new ActionRowBuilder().addComponents(createSelectMenu('home'))];
+interactiveDM.serverGuide.row = [new ActionRowBuilder().addComponents(createSelectMenu('serverGuide'))];
+interactiveDM.contactStaff.row = [
     new ActionRowBuilder().addComponents(createSelectMenu('contactStaff')),
     new ActionRowBuilder().addComponents(
         new ButtonBuilder()
@@ -103,5 +122,6 @@ interactiveDM.contactStaff.row = [
 
 export default {
     interactiveDM,
-    options
+    options,
+    logs
 };
