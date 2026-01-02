@@ -2,7 +2,7 @@ import { Events, EmbedBuilder, AttachmentBuilder } from "discord.js";
 import { getSupabaseClient } from "../utility/supabase.js";
 import fs from "fs";
 import sharp from "sharp";
-import path from 'path'
+import path from 'path';
 import { fileURLToPath } from "url";
 import { getMoney, getLevel } from "../checkDb.js";
 
@@ -75,13 +75,13 @@ export default {
         if (message.author.bot) return;
 
         const levelData = await getLevel(message.author.id);
-        const moneyData = await getMoney(message.author.id)
+        const moneyData = await getMoney(message.author.id);
 
         const ajoutXp = getRandomInt(15, 25);
         const ajoutMoney = getRandomInt(15, 25);
-        const newXp = levelData.total_xp + ajoutXp;
-        const nextNextLevelXp = getXpForLevel(levelData.level + 2);
-        const nextLevelXp = getXpForLevel(levelData.level + 1);
+        const newXp = (levelData.total_xp || 0) + ajoutXp;
+        const nextNextLevelXp = getXpForLevel((levelData.level || 0) + 2);
+        const nextLevelXp = getXpForLevel((levelData.level || 0) + 1);
         let levelDelta = 0;
 
         if (!levelData || !moneyData) {
@@ -93,7 +93,7 @@ export default {
                 console.error(`❌ Impossible de créer le niveau pour ${message.author.id}:`, updateError.message);
                 return;
             }
-            
+
             const { error: moneyUpdateError } = await supabase
                 .from('money')
                 .insert({ user_id: message.author.id, money: 0, record: 0 });
@@ -107,7 +107,7 @@ export default {
         if (newXp >= nextLevelXp) {
             console.log(`🎉 ${message.author.id} est monté au niveau ${levelData.level + 1} !`);
 
-            levelDelta++
+            levelDelta++;
 
             const avatarUrl = message.author.displayAvatarURL({ format: 'png', size: 128 });
             const imageBuffer = await generateLevelUpImage(
@@ -128,7 +128,7 @@ export default {
 
             const message2 = await message.channel.send({ embeds: [embed], files: [attachment] });
             message2.react('🎉');
-            setTimeout(() => message2.delete(), 60000)
+            setTimeout(() => message2.delete(), 60000);
         }
 
         const { error: levelUpdateError } = await supabase
@@ -150,7 +150,7 @@ export default {
             .from('money')
             .update({ money: moneyData.money + ajoutMoney, record })
             .eq('user_id', message.author.id);
-        
+
         if (moneyUpdateError) {
             console.error(`❌ Impossible de mettre à jour l'argent pour l'utilisateur ${message.author.id}:`, updateError.message);
             return;
