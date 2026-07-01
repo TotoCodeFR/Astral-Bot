@@ -1,0 +1,19 @@
+{
+    "name": "@packages/database",
+    "private": true,
+    "type": "module",
+    "exports": {
+        ".": "./src/index.ts",
+        "./schema": "./src/schema.ts"
+    },
+    "dependencies": {
+        "drizzle-orm": "^0.43.1",
+        "postgres": "^3.4.5"
+    },
+    "scripts": {
+        "db:push": "drizzle-kit push"
+    },
+    "devDependencies": {
+        "drizzle-kit": "^0.30.5"
+    }
+}
