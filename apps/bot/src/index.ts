@@ -1,3 +1,4 @@
+import express from "express";
 import { Client, Events, GatewayIntentBits, Partials } from "discord.js";
 import { loadEvents } from "./loadEvents.js";
 import { loadCommands, commands } from "./loadCommands.js";
@@ -80,7 +81,17 @@ client.on(Events.InteractionCreate, async (interaction) => {
     }
 });
 
+const app = express();
+app.get("/ping", (_req, res) => {
+    res.json(true);
+});
+
 const start = async () => {
+    const port = parseInt(process.env.PORT || "3000", 10);
+    app.listen(port, () => {
+        console.log(`HTTP server listening on port ${port}`);
+    });
+
     await loadEvents(client);
     await loadCommands();
     await client.login(process.env.DISCORD_TOKEN!);
