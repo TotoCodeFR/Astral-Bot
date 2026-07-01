@@ -1,0 +1,30 @@
+{
+    "name": "astral-bot",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "keywords": [],
+    "author": "",
+    "license": "AGPL-3.0-or-later",
+    "packageManager": "pnpm@11.9.0",
+    "type": "module",
+    "devDependencies": {
+        "tsx": "^4.22.4",
+        "typescript": "^6.0.3"
+    },
+    "scripts": {
+        "dev": "pnpm --filter bot dev",
+        "build": "pnpm -r build",
+        "start": "pnpm --filter bot start",
+        "check": "pnpm -r check",
+        "lint": "pnpm -r lint",
+        "format": "prettier --write ."
+    },
+    "engines": {
+        "node": ">=22"
+    },
+    "dependencies": {
+        "eslint": "^10.5.0",
+        "prettier": "^3.8.4"
+    }
+}
